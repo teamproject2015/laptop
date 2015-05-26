@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+ <style>
+body {
+	font-family: helvetica, arial, sans serif;
+	height: 960px;
+	width: 800px;
+}
+
+div.inline { 
+	float:left; 
+	padding-right: 20px;
+}
+.clearBoth { clear:both; }
+</style>
+<script>
+	var key_press;
+	var accX,accY,accZ,accGX,accGY,accGZ,alpha,beta,gamma;
+	var accelerationString,accelerationGravityString,RotationString;
+
+function motion (event) {
+	accX=Math.round(event.acceleration.x);
+	accY=Math.round(event.acceleration.y);
+	accZ=Math.round(event.acceleration.z);
+	accGX=Math.round(event.accelerationIncludingGravity.x);
+	accGY=Math.round(event.accelerationIncludingGravity.y);
+	accGZ=Math.round(event.accelerationIncludingGravity.z);
+	alpha=Math.round(event.rotationRate.alpha);
+	beta=Math.round(event.rotationRate.beta);
+	gamma=Math.round(event.rotationRate.gamma);
+}
+
+function getMotion(){
+	document.getElementById("accelerationX").innerHTML=accX;
+	document.getElementById("accelerationY").innerHTML=accY;
+	document.getElementById("accelerationZ").innerHTML=accZ;
+
+	document.getElementById("accelerationIncludingGravityX").innerHTML=accGX;
+	document.getElementById("accelerationIncludingGravityY").innerHTML=accGY;
+	document.getElementById("accelerationIncludingGravityZ").innerHTML=accGZ;
+
+	document.getElementById("rotationRatealpha").innerHTML=alpha;
+	document.getElementById("rotationRatebeta").innerHTML=beta;
+	document.getElementById("rotationRategamma").innerHTML=gamma;
+}
+
+document.onkeydown = function(event) {
+	var key_press = String.fromCharCode(event.keyCode);
+	key_press=document.getElementById('keypressed').innerHTML = key_press;
+	getMotion();
+	accelerationString=accelerationString.concat(key_press).concat(",").concat(accx).concat(",").concat(accy).concat(",").concat(accz).concat(",");
+	accelerationGravityString=accelerationGravityString.concat(key_press).concat(",").concat(accGX).concat(",").concat(accGY).concat(",").concat(accGZ).concat(",");
+	RotationString=RotationString.concat(key_press).concat(",").concat(alpha).concat(",").concat(beta).concat(",").concat(gamma).concat(",");
+}
+window.addEventListener("devicemotion",motion,false);
+
+</script>
+</head>
+<body>
+<h2>Press any key that you like</h2>
+<h4>Key Pressed :</h4> <span id="keypressed"></span>
+<br>
+	<div id="mainForm">
+	   <div class="inline">
+	   <h4>Acceleration value </h4> 
+	   <label>AccelerationX:</label><p id="accelerationX"></p>
+	   <label>AccelerationY:</label><p id="accelerationY"></p>
+	   <label>AccelerationZ:</label><p id="accelerationZ"></p>
+	   </div>
+	   <div class="inline">
+	   <h4>AccelerationIncludingGravity value</h4> 
+	   <label>AccelerationIncludingGravityX:</label><p id="accelerationIncludingGravityX"></p>
+	   <label>AccelerationIncludingGravityY:</label><p id="accelerationIncludingGravityY"></p>
+	   <label>AccelerationIncludingGravityZ:</label><p id="accelerationIncludingGravityZ"></p>
+	   </div>
+	   <div class="inline">
+	   <h4>Gyroscope value</h4>
+	   <label>RotationRatealpha:</label><p id="rotationRatealpha"></p> 
+	   <label>RotationRatebeta:</label><p id="rotationRatebeta"></p> 
+	   <label>RotationRategamma:</label><p id="rotationRategamma"></p>
+	   </div> 
+	</div>
+
+</body>
+</html>
