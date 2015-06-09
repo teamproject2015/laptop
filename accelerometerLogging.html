@@ -1,0 +1,204 @@
+
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+        <title>Typing Test</title><meta content='width=device-width, initial-scale=1' name='viewport'/>
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js" type="text/javascript" ></script>
+<script type="text/javascript">
+$(document).ready(function()
+{
+
+//game to ask user to press the keyboard
+var width = 700; 
+var height = 700; 
+var score = 0;
+var keypressed;
+var accX,accY,accZ,accGX,accGY,accGZ,alpha,beta,gamma;
+var accelerationString,accelerationGravityString,RotationString;
+$('#start').click( function()
+{
+    $(this).hide('slow');
+    $('#score').show();
+    genLetter();
+    setTimeout(function(){alert("You have finised the time ")},30000);
+    setTimeout(function(){ window.location.reload();},30000);
+});
+
+function genLetter () {
+    var color = randomColor();
+    var k = Math.floor(Math.random() * ( 90 - 65 + 1 )) + 65;
+    var ch = String.fromCharCode(k);
+    var top = Math.floor(Math.random() * height );
+    var left = Math.floor(Math.random() * width );
+    $('#game').append('<span class="circle circle'+ k +'" style="left: '+ left +'; top: '+ top +'; background-color:'+ color +'">'+ ch +'</span>');
+    setTimeout(genLetter, 1000);
+}
+
+function randomColor(){
+    var color = '';
+    var values = ['a', 'b', 'c', 'd', 'e', 'f', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0'];
+    for (c = 0; c < 6; c++) {
+        no = Math.floor(Math.random() * 15);
+        color += values[no];
+        }
+        return color;
+}
+
+$(document).keydown( function(event) 
+{
+    keypressed = event.keyCode;
+    $('.circle'+keypressed).fadeOut('slow').hide( 'slow', function()
+    {
+        score += 10;
+        $('#score').html(score+' points');
+        $(this).remove();
+    });
+    document.getElementById('keypressed').innerHTML = String.fromCharCode(keypressed);
+});
+
+
+//Start to collect the accelemerator and gynoscope
+function motion (event) {
+    accX=(event.acceleration.x);
+    accY=(event.acceleration.y);
+    accZ=(event.acceleration.z);
+    accGX=(event.accelerationIncludingGravity.x);
+    accGY=(event.accelerationIncludingGravity.y);
+    accGZ=(event.accelerationIncludingGravity.z);
+    alpha=(event.rotationRate.alpha);
+    beta=(event.rotationRate.beta);
+    gamma=(event.rotationRate.gamma);
+}
+function getMotion(){
+    document.getElementById("accelerationX").innerHTML=accX;
+    document.getElementById("accelerationY").innerHTML=accY;
+    document.getElementById("accelerationZ").innerHTML=accZ;
+
+    document.getElementById("accelerationIncludingGravityX").innerHTML=accGX;
+    document.getElementById("accelerationIncludingGravityY").innerHTML=accGY;
+    document.getElementById("accelerationIncludingGravityZ").innerHTML=accGZ;
+
+    document.getElementById("rotationRatealpha").innerHTML=alpha;
+    document.getElementById("rotationRatebeta").innerHTML=beta;
+    document.getElementById("rotationRategamma").innerHTML=gamma;
+}
+//Store acceleremeter to the string so that we can store it into a file
+accelerationString=accelerationString.concat(key_press).concat(",").concat(accx).concat(",").concat(accy).concat(",").concat(accz).concat(",");
+accelerationGravityString=accelerationGravityString.concat(key_press).concat(",").concat(accGX).concat(",").concat(accGY).concat(",").concat(accGZ).concat(",");
+RotationString=RotationString.concat(key_press).concat(",").concat(alpha).concat(",").concat(beta).concat(",").concat(gamma).concat(",");            
+});
+window.addEventListener("devicemotion",motion,false);
+</script>
+<style type="text/css">
+body{ 
+   
+}
+#wrapper{
+    width:100%;
+    height: 1000px;
+    
+}
+#storeAcceleremeter{
+    width: 30%;
+    float:left;
+    background: yellow;
+    height: 1000px;
+}
+
+#game{
+    width: 70%;
+    float:left;
+    background:red;
+    height: 1000px;
+}
+#wrapper #game #start{
+    width: 50px;
+    padding: 10px 15px;
+    text-align: center;
+    font:bold 15px arial;
+    background-color: #dedede;
+    color: #000;
+    -webkit-border-radius: 6px;
+    -moz-border-radius: 6px;
+    position: absolute;
+    margin-left: 400px;
+    margin-top: 20px; 
+}
+#wrapper #game #start:hover{
+    cursor: pointer;
+}
+
+#wrapper #game #score{
+    font-size:46px;
+    top: 25px;
+    right: 50px;
+    display: none;
+    text-align:right;
+}
+.circle{
+    position: absolute;
+    width:30px;
+    height: 30px;
+    font: bold 14px verdana;
+    background-color: yellow;
+    text-align: center;
+    -webkit-border-radius: 20px;
+    -moz-border-radius: 20px;
+    vertical-align: middle;
+    padding: 5px;
+}
+#score{
+    font-size:46px;
+    top: 25px;
+    right: 50px;
+    display: none;
+    text-align:right;
+}
+#keydiv{
+    width: 170px;
+    float:left;
+    background: yellow;
+    height: 1000px;
+    display: inline-block;
+}
+h4{
+    display:inline;
+}
+</style>
+</head>
+<body onload="messageInstruction()">
+    <div id="wrapper">
+
+        <div id="game">
+            <div id="score">0</div>
+            <div id="start">Start</div>
+        </div>
+
+         <div id="storeAcceleremeter">
+            <div id="keydiv">
+
+                <h4>Key Pressed :</h4> <h4 id="keypressed"></h4>
+                <h4>Acceleration</h4> 
+                <label>AccelerationX:</label><p id="accelerationX"></p>
+                <label>AccelerationY:</label><p id="accelerationY"></p>
+                <label>AccelerationZ:</label><p id="accelerationZ"></p>
+                <h4>AcceleratioIncluding(Gravity</h4> 
+                <label>AccelerationIncludingGravityX:</label><p id="accelerationIncludingGravityX"></p>
+                <label>AccelerationIncludingGravityY:</label><p id="accelerationIncludingGravityY"></p>
+                <label>AccelerationIncludingGravityZ:</label><p id="accelerationIncludingGravityZ"></p>
+                <h4>Gyroscope value</h4>
+                <label>RotationRatealpha:</label><p id="rotationRatealpha"></p> 
+                <label>RotationRatebeta:</label><p id="rotationRatebeta"></p> 
+                <label>RotationRategamma:</label><p id="rotationRategamma"></p>
+            </div>
+        </div>
+    </div>   
+<script>
+function messageInstruction(){
+    alert("Please press right alphabe, and for each correction, you get 10 points, and you have 30 seconds to try ");
+}
+</script>
+</body>
+</html> 
